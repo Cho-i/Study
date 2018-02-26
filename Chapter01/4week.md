@@ -210,7 +210,7 @@ c = 3000
 
 ## 6. 콜백 함수를 이해하고 있나요?
 
-함수를 인자로 넘겨 사용하겠다.
+**함수를 인자로 넘겨 사용하겠다.**
 
 ```javascript
 $('#btn').click(function(){
@@ -229,4 +229,114 @@ forEach라는 함수안에 익명의 함수를 넣어서 forEach 구문 내에�
 
 
 
- 
+호출했던 부분으로 다시 돌아간다.
+
+```javascript
+function doFunction(callback){
+    //doFunction에서 실행 될 내용들
+    var a = 1;
+    var b = 1;
+    var c = a+b;
+    alert('doFunction 에서 실행 될 내용이 실행된다.');
+    //doFunction에서 실행 될 내용들이 다 실행 된 후 인자값으로 받은 callback을 실행한다.
+    //넘겨받은 callback이 함수이기 때문에 실행 가능.
+    //이때 c 값을 인자값으로 넘겨준다.
+    if(typeof callback === 'function'){
+        callback(c);
+    }
+}
+//먼저 doFunction을 실행 시키고 callback함수에 의해 function 안의 내용이 실행된다.
+doFunction(function(msg){
+    //doFunction 함수의 호출에 의해서 실행된다.
+    //인자값으로 받은 c값을 msg로 받는다.
+    alert('callback 함수의 실행 될 내용');
+    alert('c의 값은?'+msg);
+});
+```
+
+doFunction 함수를 호출해서 doFunction에서 실행 될 내용들이 다 실행 된 이후 다시 doFunction을 호출했던 부분으로 돌아오는것.
+
+
+
+## 7. 클로저를 이해하고 있나요?
+
+**scope**
+
+자바스크립트에서 스코프는 작성된 코드를 둘러싼 환경(유효범위).
+
+스코프는 전역(global) 또는 지역적(local)으로 정의 될 수 있음.
+
+스코프이 개념은 쉽게 생각해 scopeA와 scopeB중 우리가 어디있는지 파악하는것.
+
+**lexical scope**
+
+하나의 function내 다른 function이 있다면, 내부 function의 스코프에 접근 할 수 있음.
+
+이것을 lexical scope 또는 클로저라고 부르며, static scope라 하기도 함.
+
+**scope chain**
+
+정의된 function 각각은 자신만의 중첩된 스코프를 가지고 있음.
+
+다른 function안에 정의된 local scope를 가진 내부 function은 바깥 function과 연결되어 있음.
+
+그 연결을 scope chain이라 함.
+
+**closure**
+
+자바스크립트에서 클로저는 함수가 생성되는 시점에 생성됨.
+
+함수가 생성될 때 그 함수는 렉시컬 환경을 포섭하여 실행될 때 이용.
+
+
+
+예제1)
+
+```javascript
+function makeFunc(){
+    var name = "cho";
+    function myName(){
+        alert(name);
+    }
+    return myName;
+}
+var myFunc = makeFunc();
+myFunc();
+```
+
+몇몇 프로그래밍 언어에서, 함수 안의 지역 변수들은 그 함수가 수행되는 기간 동안에만 존재.
+
+makeFunc() 실행이 끝나면 name 변수에 더 이상 접근할 수 없게 될 것으로 예상.
+
+하지만, 자바스크립트는 자바스크립트의 함수가 클로저를 형성하기 때문.
+
+클로저는 함수와 함수가 선언된 어휘적 환경의 조합.
+
+이 환경은 클로저가 생성된 시점의 범위 내에 있는 모든 지역 변수로 구성.
+
+myFunc은 makeFunc이 실행될 때 생성된 myName 함수의 인스턴스에 대한 참조.
+
+myName의 인스턴스는 그 변수, name이 있는 어휘적 환경에 대한 참조를 유지.
+
+이런 이유로 myFunc가 호출될 때 변수 name은 사용할 수 있는 상태로 남게 되고 'cho'가 alert에 전달됨.
+
+
+
+예제2)
+
+```javascript
+function makeAdder(x){
+    return function(y){
+        return x+y;
+    }
+}
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+console.log(add5(2));
+console.log(add10(2));
+```
+
+단일 인자 x를 받아서 새 함수를 반환하는 함수 makeAddr(x)를 정의.
+
+반환되는 함수는 단일 인자 y를 받아서 x와 y의 합을 반환.
+
