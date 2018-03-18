@@ -36,3 +36,15 @@
 
 - Lesson01_this의 정체
 - Lesson02_함수호출() vs new 함수호출()
+
+## 6주차(2018.03.12)
+
+- Lesson03_함수 단위 코디 vs. 클래스 단위 코딩
+- Lesson04_인스턴스 프로퍼티와 메서드 vs. 클래스 프로퍼티와 메서드
+- Lesson05_패키지
+
+## 7주차(2018.03.19)
+
+- Lesson01_jQuery 확장 소개
+- Lesson02_jQuery 유틸리티 만들기
+- Lesson03_jQuery 플러그인 만들기
