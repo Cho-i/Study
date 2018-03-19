@@ -75,4 +75,30 @@ $(document).ready(function(){
 });
 ```
 
+## 03_사용자 정의 jQuery 유틸리티 만들기
+
+```javascript
+(function($){
+    $.addComma = function(value){
+        //숫자를 문자로 형변환
+        var data = value +"";
+        //문자를 배열로 만들기
+        var aryResult = data.split("");
+        //배열 요소를 뒤에서 3자리수마다 콤마 추가하기
+        var startIndex = aryResult.length-3;
+        for(var i=startIndex; i>0; i-=3){
+            aryResult.splice(i, 0, ",");
+        }
+        //결과값 리턴
+        return aryResult.join("");//배열의 원소들을 연결하여 하나의 값으로 만듦
+    }
+ })(jQuery);
+$(document).ready(function(){
+    console.log("123 >",$.addComma("123"));
+    console.log("1234 >",$.addComma("1234"));
+    console.log("12345 >",$.addComma("12345"));
+    console.log("123456 >",$.addComma("123456"));
+    console.log("1234567 >",$.addComma("1234567"));
+});
+```
 
