@@ -102,3 +102,68 @@ $(document).ready(function(){
 });
 ```
 
+# Lesson 03_jQuery 플러그인 만들기
+
+## 02_jQuery 플러그인 구조
+
+```javascript
+(function($){
+    $.fn.플러그인이름 = function(속성값){
+        this.each(function(index)){
+        //기능구현          
+        }
+        return this;
+    }
+})(jQuery);
+```
+
+## 03_jQuery 플러그인 구조 분석
+
+```javascript
+(function($){//redColor 플러그인 정의
+    $.fn.redColor = function(){
+        this.each(function(index){
+            $(this).css('border','4px solid red');
+        })
+        return this;
+    }
+})(jQuery);
+$(document).ready(function(){
+    //redColor 플러그인 사용
+    $('p').redColor();
+});
+```
+
+$.fn은 prototype과 동일. 즉, jQuery.prototype과 동일.
+
+each()메서드의 내부에서 this는 현재 처리하고 있는 자바스크립트 DOM 노드.
+
+jQuery 인스턴스를 생성($(this))한 후 css()메서드를 사용.
+
+redColor() 플러그인 호출 후 jQuery 메서드를 체인구조로 호출 할 수 있게 하기 위해서 return this를 해야함.
+
+
+
+```javascript
+(function($){
+    //removeAni 플러그인 정의
+    $.fn.removeAni = function(){
+        //요소 개수만큼 루프 실행
+        this.each(function(index){
+            //현재 요소 얻기
+            var $target = $(this);
+            //딜레이(index*1000) 후 애니메이션 실행
+            $target.delay(index*1000).animate({height:0},500,function(){
+                //애니 종료 후 현재 요소 제거
+                $target.remove();
+            })
+        })
+        return this;
+    }
+})(jQuery);
+$(document).ready(function(){
+    //removeAni()플러그인 호출
+    $('.menu li').removeAni();
+});
+```
+
