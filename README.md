@@ -48,3 +48,11 @@
 - Lesson01_jQuery 확장 소개
 - Lesson02_jQuery 유틸리티 만들기
 - Lesson03_jQuery 플러그인 만들기
+
+## 8주차(2018.03.26)
+
+- Lesson04_함수 기반 플러그인 만들기
+- Lesson05_클래스 기반 플러그인 만들기
+- Lesson06_플러그인 그룹 만들기
+- Lesson07_extend() 메서드를 활용한 플러그인 옵션처리
+
