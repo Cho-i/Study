@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>SimpleGallery</title>
+    <style>
+        body{font-size:9pt;}
+        div.gallery{position:relative;border:1px solid #000;height:600px;}
+        div.gallery img{position:absolute;left:0;top:0;width:120px;}
+    </style>
+    <script type="text/javascript"  src="libs/jquery-1.11.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.gallery').simpleGallery([{
+                count:8,
+                imageWidth:150,
+                imageHeight:150
+            },{
+                count:4,
+                imageWidth:200,
+                imageHeight:200
+            }]);
+        });
+        (function($){
+            function SimpleGallery(selector, count, width, height){
+                this.$images = null;
+                this.count =count;
+                this.imageWidth = width;
+                this.imageHeight = height;
+                this.init(selector);
+            }
+
+            SimpleGallery.prototype.init=function(selector){
+                this.$images = $(selector);
+            }
+
+            SimpleGallery.prototype.showGallery=function(){
+                var length = this.$images.length;
+
+                for(var i=0;i<length;i++){
+                    var $img = this.$images.eq(i);
+
+                    var x = 100+((i%this.count)*this.imageWidth);
+                    var y = 100+(parseInt(i/this.count)*this.imageHeight);
+
+                    $img.css({
+                        left:x,
+                        top:y
+                    });
+                }
+            }
+            $.default = {
+                count:5,
+                imageWidth:200,
+                imageHeight:200
+            }
+            $.fn.simpleGallery = function(optionList){
+                this.each(function(index){
+                    var targetOptions = optionList[index];
+                    var options = $.extend(null, $.default, targetOptions);
+                    var gallery = new SimpleGallery($(this).children('img'),options.count,options.imageWidth,options.imageHeight);
+                    gallery.showGallery();
+                });
+            }
+        })(jQuery);
+
+    </script>
+</head>
+<body>
+    <p>SimpleGallery</p>
+    <div class="gallery">
+        <img src="banners/1.png" >
+        <img src="banners/2.png" >
+        <img src="banners/3.png" >
+        <img src="banners/4.png" >
+        <img src="banners/5.png" >
+        <img src="banners/6.png" >
+        <img src="banners/7.png" >
+        <img src="banners/8.png" >
+    </div>
+    <div class="gallery">
+        <img src="banners/1.png" >
+        <img src="banners/2.png" >
+        <img src="banners/3.png" >
+        <img src="banners/4.png" >
+        <img src="banners/5.png" >
+        <img src="banners/6.png" >
+        <img src="banners/7.png" >
+        <img src="banners/8.png" >
+    </div>
+</body>
+</html>
