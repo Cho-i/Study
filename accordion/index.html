@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="libs/css/accordion.css">
+	<script src="libs/js/jquery-1.11.0.min.js"></script>
+	<script src="libs/js/jquery.easing.1.3.js"></script>
+	<script src="libs/js/accordion_v2.js"></script>
+</head>
+
+<body>
+	<ul class="accordion-menu" id="accordionMenu1">
+		<li data-extension="open">
+			<div class="main-title"><span class="folder"></span><a>menu1</a></div>
+			<ul class="sub">
+				<li><a>sub1-1</a></li>
+				<li><a>sub1-2</a></li>
+				<li><a>sub1-3</a></li>
+				<li><a>sub1-4</a></li>
+			</ul>
+		</li>		
+		<!-- 만약 서브 메뉴 패널이 있는데 data-extension을 넣지 않는 경우 기본 값인 close 설정 -->
+		<li>
+			<div class="main-title"><span class="folder"></span><a>menu2</a></div>
+			<ul class="sub">
+				<li><a>sub2-1</a></li>
+				<li><a>sub2-2</a></li>
+			</ul>
+		</li>	
+		<li>
+			<div class="main-title"><span class="folder"></span><a>menu3</a></div>
+			<ul class="sub">
+				<li><a>sub3-1</a></li>
+				<li><a>sub3-2</a></li>
+				<li><a>sub3-3</a></li>
+				<li><a>sub3-4</a></li>
+				<li><a>sub3-5</a></li>
+				<li><a>sub3-6</a></li>
+			</ul>
+		</li>
+		<!-- 서브 메뉴 패널이 없는 경우 data-extension 값은 empty 설정 -->
+		<li>
+			<div class="main-title"><span class="folder empty"></span><a>menu4</a></div>
+		</li>
+	</ul>
+</body>
+</html>
+
+
+
