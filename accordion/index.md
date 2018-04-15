@@ -135,9 +135,19 @@
 
       서브 메뉴아이템이 선택될 때 선택정보를 외부에 알려주는 선택 이벤트를 발생하는 기능 구현.
 
-6. 캡슐화 적용
+6. 캡슐화 적용 ->[accordion_10.js](libs/js/accordion_v10.js)
+
+   외부에서 접근하지 말아야 하는 프로퍼티와 메서드에 언더바(_) 붙이기.
+
+   | 요소     | 접근가능(public)                                             | 접근 불가능(private)                                         |
+   | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+   | 프로퍼티 | $accordionMenu                                               | ```_$mainMenuItems```<br>```_$selectSubItem```               |
+   | 메서드   | closeSubMenu()<br>closeSubMenuAt()<br>openSubMenu()<br>openSubMenuAt()<br>toggleSubMenuPanel()<br>selectMenu() | ```_init()```<br>```_initEvent()```<br>```_initSubMenuItem()```<br>```_setFolderState()```<br>```_dispatchOpenCloseEvent()```<br>```_dispatchSelectEvent()``` |
 
 7. 폴더아코디언 jQuery 플러그인 제작
+
+   1. 폴더아코디언 플러그인 만들기 ->[accordion_v11.js](libs/js/accordion_v11.js)
+   2. 폴더아코디언 선택 처리 플러그인 만들기 ->[accordion_v12.js](libs/js/accordion_v12.js)
 
 
 
