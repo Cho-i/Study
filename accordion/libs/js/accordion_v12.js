@@ -1,12 +1,16 @@
 /*
-	1. 
+	1. ë¨¼ì € në²ˆì§¸ ì¸ë±ìŠ¤ì— í•´ë‹¹í•˜ëŠ” ë©”ë‰´ë¥¼ ì„ íƒí•˜ëŠ” ê¸°ëŠ¥(selectMenu())ì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´ folderAccordionMenu í”ŒëŸ¬ê·¸ì¸ì—ì„œ ìƒì„±í•œ FolderAccordionMenu ê°ì²´ë¥¼ í•´ë‹¹ jQuery ê°ì²´ì— ì €ì¥.
+	2. në²ˆì§¸ ì„œë¸Œ ë©”ë‰´íŒ¨ë„ê³¼ ì„œë¸Œ ë©”ë‰´ ì•„ì´í…œì„ ì„ íƒí•˜ëŠ” ê¸°ëŠ¥ì„ êµ¬í˜„í•  í”ŒëŸ¬ê·¸ì¸ selectFolderAccordionMenuë¼ëŠ” ì´ë¦„ìœ¼ë¡œ ë§Œë“¦.
+	2-1. 1ì—ì„œ ì €ì¥í•´ë‘” FolderAccordionMenu ê°ì²´ë¥¼ ê°€ì ¸ì˜´.
+	2-2. selectMenu() ë©”ì„œë“œë¥¼ í˜¸ì¶œí•´ ì„œë¸Œ ë©”ë‰´íŒ¨ë„ê³¼ ì„œë¸Œ ë©”ë‰´ì•„ì´í…œì„ ì„ íƒ.
+	3. selectAccordionMenu í”ŒëŸ¬ê·¸ì¸ì„ í™œìš©í•´ 0ë²ˆì§¸ ì„œë¸Œ ë©”ë‰´íŒ¨ë„ì„ ì—´ê³  1ë²ˆì§¸ ì„œë¸Œ ë©”ë‰´ì•„ì´í…œì„ ì„ íƒí•˜ëŠ” ì½”ë“œë¥¼ ì‘ì„±.
 */
 
 $(document).ready(function(){
-	//Æú´õ¾ÆÄÚµğ¾ğ ¸Ş´º ÇÃ·¯±×ÀÎ ½ÇÇà
-	$('#accordionMenu1').folderAccordionMenu();//2.
+	//í´ë”ì•„ì½”ë””ì–¸ ë©”ë‰´ í”ŒëŸ¬ê·¸ì¸ ì‹¤í–‰
+	$('#accordionMenu1').folderAccordionMenu();
 
-	//ÀÌº¥Æ® µî·Ï
+	//ì´ë²¤íŠ¸ ë“±ë¡
 	$('#accordionMenu1').on('open',function(e){
 		console.log('open',e.$target.find('.main-title a').text());
 	});
@@ -14,27 +18,39 @@ $(document).ready(function(){
 		console.log('close',e.$target.find('.main-title a').text());
 	});
 	$('#accordionMenu1').on('select',function(e){
-		var oldText = '¾øÀ½';
+		var oldText = 'ì—†ìŒ';
 		if(e.$oldItem) oldText = e.$oldItem.text();
 		console.log('select old =',oldText+",new ="+e.$newItem.text());
 	});
+
+
+	$('#accordionMenu1').selectFolderAccordionMenu(0,1);//3.
 });
 (function($){
-	//folderAccordionMenu ÇÃ·¯±×ÀÎ
-	$.fn.folderAccordionMenu = function(){//1.
-		//¼±ÅÃÀÚ¿¡ ÇØ´çÇÏ´Â ¿ä¼Ò °³¼ö¸¸Å­ FolderAccordionMenu °´Ã¼ »ı¼º.
-		this.each(function(index){//1-1.
+	//folderAccordionMenu í”ŒëŸ¬ê·¸ì¸
+	$.fn.folderAccordionMenu = function(){
+		//ì„ íƒìì— í•´ë‹¹í•˜ëŠ” ìš”ì†Œ ê°œìˆ˜ë§Œí¼ FolderAccordionMenu ê°ì²´ ìƒì„±.
+		this.each(function(index){
 			var $this = $(this);
 			var menu = new FolderAccordionMenu($this);
+			$this.data('folderAccordionMenu',menu);//1.
 		});
-		return this;//1-2.
+		return this;
+	}
+
+	//në²ˆì§¸ ë©”ë‰´ ì„ íƒ
+	$.fn.selectFolderAccordionMenu = function(mainIndex,subIndex,animation){//2.
+		this.each(function(index){
+			var accordionMenu = $(this).data('accordionMenu');//2-1.
+			accordionMenu.selectMenu(mainIndex,subIndex,animation);//2-2.
+		});
 	}
 })(jQuery);
 
 function FolderAccordionMenu(selector){
 	this.$accordionMenu = null;
 	this._$mainMenuItems = null;
-	// ¼±ÅÃ ¼­ºê ¸Ş´º¾ÆÀÌÅÛ
+	// ì„ íƒ ì„œë¸Œ ë©”ë‰´ì•„ì´í…œ
 	this._$selectSubItem = null;
 
 	this._init(selector);
@@ -42,13 +58,13 @@ function FolderAccordionMenu(selector){
 	this._initEvent();
 }
 
-/* ¿ä¼ÒÃÊ±âÈ­ */
+/* ìš”ì†Œì´ˆê¸°í™” */
 FolderAccordionMenu.prototype._init = function(selector){
 	this.$accordionMenu = $(selector);
 	this._$mainMenuItems = this.$accordionMenu.children('li');
 }
 
-/* ÀÌº¥Æ® ÃÊ±âÈ­ */
+/* ì´ë²¤íŠ¸ ì´ˆê¸°í™” */
 FolderAccordionMenu.prototype._initEvent = function(){
 	var objThis = this;
 	this._$mainMenuItems.children('.main-title').click(function(e){
@@ -61,13 +77,13 @@ FolderAccordionMenu.prototype._initEvent = function(){
 	});
 }
 
-/* ¼­ºê ÆĞ³Î ÃÊ±âÈ­ - ÃÊ±â ½ÃÀÛ ½Ã ´İÈù »óÅÂ·Î ¸¸µé±â */
+/* ì„œë¸Œ íŒ¨ë„ ì´ˆê¸°í™” - ì´ˆê¸° ì‹œì‘ ì‹œ ë‹«íŒ ìƒíƒœë¡œ ë§Œë“¤ê¸° */
 FolderAccordionMenu.prototype._initSubMenuPanel = function(){
 	var objThis = this;
 	this._$mainMenuItems.each(function(index){
 		var $item = $(this);
 		var $subMenu = $item.find('.sub');
-		//¼­ºê°¡ ¾ø´Â °æ¿ì
+		//ì„œë¸Œê°€ ì—†ëŠ” ê²½ìš°
 		if($subMenu.length==0){
 			$item.attr('data-extension','empty');
 			objThis._setFolderState($item,'empty');
@@ -81,14 +97,14 @@ FolderAccordionMenu.prototype._initSubMenuPanel = function(){
 	});
 }
 
-/* Æú´õ »óÅÂ ¼³Á¤ */
+/* í´ë” ìƒíƒœ ì„¤ì • */
 FolderAccordionMenu.prototype._setFolderState = function($item,state){
 	var $folder = $item.find('.main-title .folder');
 	$folder.removeClass();
 	$folder.addClass('folder '+state);
 }
 
-/* ¼­ºê ¸Ş´ºÆĞ³Î ¿­±â animation ±âº»Àº true */
+/* ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ì—´ê¸° animation ê¸°ë³¸ì€ true */
 FolderAccordionMenu.prototype.openSubMenu = function($item, animation){
 	if($item != null){
 		$item.attr('data-extension','open');
@@ -100,14 +116,14 @@ FolderAccordionMenu.prototype.openSubMenu = function($item, animation){
 			$subMenu.stop().animate({marginTop:0},300,'easeInCubic');
 		}
 
-		//Æú´õ »óÅÂ¸¦ open »óÅÂ·Î ¸¸µé±â
+		//í´ë” ìƒíƒœë¥¼ open ìƒíƒœë¡œ ë§Œë“¤ê¸°
 		this._setFolderState($item,'open');
-		//open ÀÌº¥Æ® ¹ß»ı
+		//open ì´ë²¤íŠ¸ ë°œìƒ
 		this._dispatchOpenCloseEvent($item,'open');
 	}
 }
 
-/* ¼­ºê ¸Ş´ºÆĞ³Î ´İ±â animation ±âº»°ªÀº true */
+/* ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ë‹«ê¸° animation ê¸°ë³¸ê°’ì€ true */
 FolderAccordionMenu.prototype.closeSubMenu = function($item, animation){
 	if($item != null){
 		$item.attr('data-extension','close');
@@ -120,22 +136,22 @@ FolderAccordionMenu.prototype.closeSubMenu = function($item, animation){
 			$subMenu.stop().animate({marginTop:subMenuPanelHeight},300,'easeInCubic');
 		}
 
-		//Æú´õ »óÅÂ¸¦ open »óÅÂ·Î ¸¸µé±â
+		//í´ë” ìƒíƒœë¥¼ open ìƒíƒœë¡œ ë§Œë“¤ê¸°
 		this._setFolderState($item,'close');
-		//close ÀÌº¥Æ® ¹ß»ı
+		//close ì´ë²¤íŠ¸ ë°œìƒ
 		this._dispatchOpenCloseEvent($item,'close');
 	}
 }
 
-/* ¼­ºê ¸Ş´ºÆĞ³Î ¿­°í ´İ±â */
+/* ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ì—´ê³  ë‹«ê¸° */
 FolderAccordionMenu.prototype.toggleSubMenuPanel = function($item){
 	var extension = $item.attr('data-extension');
-	//¼­ºê°¡ ¾ø´Â °æ¿ì Ãë¼Ò
+	//ì„œë¸Œê°€ ì—†ëŠ” ê²½ìš° ì·¨ì†Œ
 	if(extension == 'empty'){
 		return;
 	}
 
-	//¼­ºê¸Ş´ºÆĞ³ÎÀÌ ÀÖ´Â°æ¿ì¸¸ ½ÇÇà
+	//ì„œë¸Œë©”ë‰´íŒ¨ë„ì´ ìˆëŠ”ê²½ìš°ë§Œ ì‹¤í–‰
 	if(extension == 'open'){
 		this.closeSubMenu($item);
 	}else{
@@ -143,19 +159,19 @@ FolderAccordionMenu.prototype.toggleSubMenuPanel = function($item){
 	}
 }
 
-/* index ¸Ş´ºÀÇ ¼­ºê ¸Ş´ºÆĞ³Î ¿­±â */
+/* index ë©”ë‰´ì˜ ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ì—´ê¸° */
 FolderAccordionMenu.prototype.openSubMenuAt = function(index, animation){
 	var $item = this._$mainMenuItems.eq(index);
 	this.openSubMenu($item, animation);
 }
 
-/* index ¸Ş´ºÀÇ ¼­ºê ¸Ş´ºÆĞ³Î ´İ±â */
+/* index ë©”ë‰´ì˜ ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ë‹«ê¸° */
 FolderAccordionMenu.prototype.closeSubMenuAt = function(index, animation){
 	var $item = this._$mainMenuItems.eq(index);
 	this.closeSubMenu($item, animation);
 }
 
-/* ¼­ºê ¸Ş´º¾ÆÀÌÅÛ ¼±ÅÃ */
+/* ì„œë¸Œ ë©”ë‰´ì•„ì´í…œ ì„ íƒ */
 FolderAccordionMenu.prototype._selectSubMenuItem = function($item){
 	var $oldItem = this._$selectSubItem;
 
@@ -165,38 +181,38 @@ FolderAccordionMenu.prototype._selectSubMenuItem = function($item){
 	this._$selectSubItem = $item;
 	this._$selectSubItem.addClass('select');
 
-	//¼±ÅÃ ÀÌº¥Æ® ¹ß»ı
+	//ì„ íƒ ì´ë²¤íŠ¸ ë°œìƒ
 	this._dispatchSelectEvent($oldItem,this._$selectSubItem);
 }
 
 /*
-* ¸Ş´º ¼±ÅÃ ±â´É
-* @mainIndex:¸ŞÀÎ ¸Ş´º¾ÆÀÌÅÛ index
-* @subIndex:¼­ºê ¸Ş´º¾ÆÀÌÅÛ index
-* @animation:¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà À¯¹«
+* ë©”ë‰´ ì„ íƒ ê¸°ëŠ¥
+* @mainIndex:ë©”ì¸ ë©”ë‰´ì•„ì´í…œ index
+* @subIndex:ì„œë¸Œ ë©”ë‰´ì•„ì´í…œ index
+* @animation:ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰ ìœ ë¬´
 */
 FolderAccordionMenu.prototype.selectMenu = function(mainIndex,subIndex,animation){
-	//¸ŞÀÎ ¸Ş´º¾ÆÀÌÅÛ
+	//ë©”ì¸ ë©”ë‰´ì•„ì´í…œ
 	var $item = this._$mainMenuItems.eq(mainIndex);
-	//¼­ºê ¸Ş´º¾ÆÀÌÅÛ
+	//ì„œë¸Œ ë©”ë‰´ì•„ì´í…œ
 	var $subMenuItem = $item.find('.sub li').eq(subIndex);
-	//¼­ºê ¸Ş´º¾ÆÀÌÅÛÀÌ Á¸ÀçÇÏ´Â °æ¿ì¿¡¸¸ Ã³¸®
+	//ì„œë¸Œ ë©”ë‰´ì•„ì´í…œì´ ì¡´ì¬í•˜ëŠ” ê²½ìš°ì—ë§Œ ì²˜ë¦¬
 	if($subMenuItem){
-		//¼­ºê ¸Ş´ºÆĞ³Î ¿­±â
+		//ì„œë¸Œ ë©”ë‰´íŒ¨ë„ ì—´ê¸°
 		this.openSubMenu($item,animation);
-		//¼­ºê ¸Ş´º¾ÆÀÌÅÛ ¼±ÅÃ
+		//ì„œë¸Œ ë©”ë‰´ì•„ì´í…œ ì„ íƒ
 		this._selectSubMenuItem($subMenuItem);
 	}
 }
 
-//open, close ÀÌº¥Æ® ¹ß»ı
+//open, close ì´ë²¤íŠ¸ ë°œìƒ
 FolderAccordionMenu.prototype._dispatchOpenCloseEvent = function($item,eventName){
 	var event = jQuery.Event(eventName);
 	event.$target = $item;
 	this.$accordionMenu.trigger(event);
 }
 
-//select ÀÌº¥Æ® ¹ß»ı
+//select ì´ë²¤íŠ¸ ë°œìƒ
 FolderAccordionMenu.prototype._dispatchSelectEvent = function($oldItem,$newItem){
 	var event = jQuery.Event('select');
 	event.$oldItem = $oldItem;
