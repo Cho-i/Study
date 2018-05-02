@@ -6,7 +6,7 @@
 
 ![](http://cfile4.uf.tistory.com/image/2717FF4557512BBA34616D)
 
-****
+------
 
 
 
@@ -85,8 +85,6 @@ USB 규격에 맞춰 만들어져 있는 기기라면 그 어떤 기기라도 �
 - 변수 및 매개변수 선언 시 특정 인터페이스 타입인 경우 반드시 특정 인터페이스를 구현한 클래스의 인스턴스만을 저장하고나 매개변수 값으로 넘길 수 있음.
 - 변수 및 매개변수 선언 시 특정 클래스 타입인 경우 반드시 특정 클래스 또는 특정 클래스를 상속받은 자식 클래스의 인스턴스만을 저장하거나 매개변수 값으로 넘길 수있음.
 
-
-
 ## 자바스크립트에서 다형성
 
 자바스크립트에서 다형성을 구현하는 방법을 알아보자.
@@ -95,8 +93,6 @@ USB 규격에 맞춰 만들어져 있는 기기라면 그 어떤 기기라도 �
 
 - 다형성 선언부분 : 인터페이스와 추상클래스
 - 다형성 구현부분 : 클래스
-
-
 
 ### 자바스크립트에서 다형성 지원 유무
 
@@ -323,7 +319,6 @@ Gallery.prototype.grid = function(){
 
 - 세로, 가로, 바둑판식, 랜덤 이미지 정렬까지 네 가지의 이미지 정렬 기능이 모두 Gallery 클래스에 구현되어 있기 때문에 기능 하나를 선택하면 세 개의 기능은 사용하고 있지 않게 되어 불필요한 코드가 됨.
 
-
 **코드 재사용성이 떨어진다.**
 
 - Gallery 내부에 이미지 정렬 기능이 모두 구현되어 있기 때문에 만약 이미지 정렬 기능을 독립적으로 사용하고 싶어도 사용할 수가 없음. 원하는 정렬 기능을 사용하려면 반드시 Gallery 클래스의 인스턴스를 만들어야함.
@@ -332,4 +327,168 @@ Gallery.prototype.grid = function(){
 
 - 네 가지 정렬 기능 이외에 새로운 이미지 정렬 기능을 추가해야 하는 경우 Gallery 클래스에 추가해서 구현해야 하기 때문에 클래스 기능이 점점 거대해져 유지보수가 어려워짐.
 
+### 다형성을 적용한 코드
 
+참고로 일반적으로 다형성 적용 전 코드와 같이 switch를 활용해 여러 조건을 처리하는 코드는 다형성으로 바꿀 수 있는 전형적인 경우.
+
+위 코드를 가지고 다형성 적용을 위해 5단계로 나눠보자.
+
+1. 다형성 선언부분 만들기
+2. 다형성 구현부분 만들기(정렬기능 구현)
+3. 다형성과 합성을 활용한 정렬 기능 연결
+4. 정렬 기능 호출
+5. 독립적으로 정렬 기능을 사용할 수 있는지 확인
+6. 정리
+
+**단계01:다형성 선언부분 만들기**
+
+다형성을 만드는 첫 번째 작업은 구현 부분에 공통적으로 구현해야 하는 기능을 선별해 선언부분으로 만드는 작업.
+
+지금 이미지 정렬 갤러리의 경우는 정렬 기능을 선언부분으로 만들어주면 좋을 것.
+
+```javascript
+function align($images){
+    //이곳에 정렬 기능을 구현
+}
+```
+
+정리하자면 선언부분은 앞에서 알아본 것 처럼 반드시 지켜야할 약속으로 구현부분에서는 반드시 선언부분에 정의되어 있는 메서드의 이름과 매개변수 개수까지 동일하게 메서드를 정의해서 구현해야함.
+
+또한 자바스크립트의 경우 다향성의 선언부분을 정의하는 문법을 제공하지 않기 때문에 선언부분을 만들었다는 가정을 하고 진행하도록함.
+
+**단계02:다형성 구현부분 만들기**
+
+이번에는 선언부분에 맞게 코드를 구현하는 단계입니다.
+
+아래 코드와 같이 네 가지의 정렬 기능 클래스를 생성한 후 선언부분에 작성된 메서드와 동일하게 메서드를 추가해 정렬 기능을 구현해 주도록 함.
+
+인스턴스는 여러 개 생성할 필요없이 하나만 생성하면 되니 프로토타입 방식보다 리터럴 방식을 이용해 클래스를 만들어 보도록 하겠음.
+
+```javascript
+//가로 정렬 기능
+var horizontal = {
+    align : function($images){
+        //이미지 개수 구하기
+        var length = $images.length;
+        //이미지 배열하기
+        for(var i = 0; i < length; i++){
+            var $img = $images.eq(i);
+            var x = i*150;
+            $img.css({left:x,top:0});
+        }
+    }
+};
+
+//세로 정렬 기능
+var vertical = {
+    align : function($images){
+        //이미지 개수 구하기
+        var length = $images.length;
+        //이미지 배열하기
+        for(var i = 0; i < length; i++){
+            var $img = $images.eq(i),
+                y = i*150;
+            $img.css({left:0,top:y});
+        }
+    }
+};
+
+//랜덤 정렬 기능
+var random = {
+    align : function($images){
+        //이미지 개수 구하기
+        var length = $images.length;
+        //이미지 배열하기
+        for(var i = 0; i < length; i++){
+            var $img = $images.eq(i),
+                x = 200*Math.random(),
+                y = 200*Math.random();
+            $img.css({left:x,top:y});
+        }
+    }
+};
+
+//바둑판 정렬 기능
+var grid = {
+    align : function($images){
+        //이미지 개수 구하기
+        var length = $images.length,
+            count = 3;
+        //이미지 배열하기
+        for(var i = 0; i < length; i++){
+            var $img = $images.eq(i),
+                x = (i%count)*150,
+                y = parseInt(i/count)*150;
+            $img.css({left:x,top:y});
+        }
+    }
+};
+```
+
+**단계03:다형성과 합성을 활용한 정렬 기능 연결**
+
+이제 Gallery 클래스의 show() 메서드에 다형성을 적용해 주기 위해 정렬 기능을 구현한 클래스의 인스턴스를 받을 수 있는 매개변수를 추가.
+
+```javascript
+//이미지 정렬 기능 실행
+Gallery.prototype.show = function(alignable){
+    alignable.align(this.$images);
+}
+```
+
+정렬 기능 버튼을 누를 때 선택한 정렬 기능이 alignable 매개변수로 넘어와 사용될 것.
+
+즉 합성을 사용해 정렬 기능을 빌려 사용하게 되는 것.
+
+**단계04:정렬 기능 호출**
+
+정렬 버튼 클릭시 버튼에 맞는 이미지 정렬 기능(align)의 인스턴스를 매개변수 값으로 show() 메서드를 호출해 줌.
+
+```javascript
+$(function(){
+    var alignImg = new Gallery('#container1 img');
+    var $btnHorizn = $('#btnHorizontal'),
+        $btnRandom = $('#btnRandom'),
+        $btnVertical = $('#btnVertical'),
+        $btnGrid = $('#btnGrid');
+
+    $btnHorizn.on('click',function(){
+        alignImg.show(horizontal);//가로정렬 인스턴스 전달
+    });
+    $btnVertical.on('click',function(){
+        alignImg.show(vertical);//세로정렬 인스턴스 전달
+    });
+    $btnRandom.on('click',function(){
+        alignImg.show(random);//랜덤정렬 인스턴스 전달
+    });
+    $btnGrid.on('click',function(){
+        alignImg.show(grid);//바둑판 정렬 인스턴스 전달
+    });
+});
+```
+
+**단계05:독립적으로 정렬 기능을 사용할 수 있는지 확인하기**
+
+정렬 기능이 Gallery 내부에 구현되어 있지 않고 외부에 독립적으로 구현되어 있기 때문에 랜덤 정렬 기능을 다음과 같이 독립적으로 사용할 수 있을 것.
+
+```javascript
+$(function(){
+    var $btnRandom = $('#btnRandom');
+    $btnRandom.on('click',function(){
+        //독립적으로 랜덤 정렬 기능만 사용
+        random.align($('#container1 img'));
+    });
+});
+```
+
+**단계06:정리**
+
+이미지 정렬 기능은 Gallery 클래스 내부에 구현되어 있지 않고 각각 독립적인 클래스로 구현.
+
+**장점**
+
+- 가벼워진 코드(Gallery 클래스 내부에 이미지 정렬 기능을 직접 구현하지 않고 모두 외부에 구현되어 있기 때문에 많이 가벼워짐, 이와 동시에 코드를 간결하게)
+- 코드 재사용성이 높아짐(이미지 정렬 기능이 각각 독립적으로 구현되어 있어서 Gallery 도움없이 이미지 정렬 기능을 사용할 수 있음)
+- 유지보수가 쉬어짐(새로운 이미지 정렬 기능을 추가해야 하는 경우 이미지 정렬 기능 인터페이스에 맞게 클래스를 만들어 Gallery에 연결해서 사용하면 됨. Gallery 클래스를 전혀 수정하지 않고.)
+
+http://webclub.tistory.com/406
