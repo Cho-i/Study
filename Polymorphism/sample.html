@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>sample</title>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+	.btn-gruop{margin-bottom:10px;}
+	.btn-gruop button{background-color:#222;color:#fff;border-radius:4px;border:1px solid #ccc;line-height:1;padding:5px 10px;}
+	div.image-container{position:relative;border:1px solid #000;}
+	div.image-container img{position:absolute;left:0;top:0;width:120px;}
+	</style>
+	<script>
+	$(function(){
+		var alignImg = new Gallery('#container1 img');
+		var $btnHorizn = $('#btnHorizontal'),
+			$btnRandom = $('#btnRandom'),
+			$btnVertical = $('#btnVertical'),
+			$btnGrid = $('#btnGrid');
+
+		$btnHorizn.on('click',function(){
+			alignImg.show(horizontal);//가로정렬 인스턴스 전달
+		});
+		$btnVertical.on('click',function(){
+			alignImg.show(vertical);//세로정렬 인스턴스 전달
+		});
+		$btnRandom.on('click',function(){
+			alignImg.show(random);//랜덤정렬 인스턴스 전달
+		});
+		$btnGrid.on('click',function(){
+			alignImg.show(grid);//바둑판 정렬 인스턴스 전달
+		});
+	});
+
+	function Gallery(selector) {
+		this.$images = null;
+		this.init(selector)
+	}
+
+	Gallery.prototype.init = function (selector) {
+		this.$images = $(selector);
+	};
+
+	//이미지 정렬 기능 실행
+	Gallery.prototype.show = function(alignable){
+		alignable.align(this.$images);
+	}
+
+	//가로 정렬 기능
+	var horizontal = {
+		align : function($images){
+			//이미지 개수 구하기
+			var length = $images.length;
+			//이미지 배열하기
+			for(var i = 0; i < length; i++){
+				var $img = $images.eq(i);
+				var x = i*150;
+				$img.css({left:x,top:0});
+			}
+		}
+	};
+
+	//세로 정렬 기능
+	var vertical = {
+		align : function($images){
+			//이미지 개수 구하기
+			var length = $images.length;
+			//이미지 배열하기
+			for(var i = 0; i < length; i++){
+				var $img = $images.eq(i),
+					y = i*150;
+				$img.css({left:0,top:y});
+			}
+		}
+	};
+
+	//랜덤 정렬 기능
+	var random = {
+		align : function($images){
+			//이미지 개수 구하기
+			var length = $images.length;
+			//이미지 배열하기
+			for(var i = 0; i < length; i++){
+				var $img = $images.eq(i),
+					x = 200*Math.random(),
+					y = 200*Math.random();
+				$img.css({left:x,top:y});
+			}
+		}
+	};
+
+	//바둑판 정렬 기능
+	var grid = {
+		align : function($images){
+			//이미지 개수 구하기
+			var length = $images.length,
+				count = 3;
+			//이미지 배열하기
+			for(var i = 0; i < length; i++){
+				var $img = $images.eq(i),
+					x = (i%count)*150,
+					y = parseInt(i/count)*150;
+				$img.css({left:x,top:y});
+			}
+		}
+	};	
+	</script>
+</head>
+<body>
+	<div class="btn-gruop">
+		<button id="btnHorizontal">가로정렬</button>
+		<button id="btnVertical">세로정렬</button>
+		<button id="btnRandom">랜덤정렬</button>
+		<button id="btnGrid">바둑판정렬</button>
+	</div>
+	<div class="image-container" id="container1">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+		<img src="images/1.jpg">
+	</div>
+</body>
+</html>
