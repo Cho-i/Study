@@ -499,6 +499,7 @@ $(function(){
 
 - 유지보수가 쉬어짐(새로운 이미지 정렬 기능을 추가해야 하는 경우 이미지 정렬 기능 인터페이스에 맞게 클래스를 만들어 Gallery에 연결해서 사용하면 됨. Gallery 클래스를 전혀 수정하지 않고.)
 
+url : https://cho-i.github.io/Study/Polymorphism/sample.html
   ​
 
 
